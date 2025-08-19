@@ -53,6 +53,18 @@ def appmetadata() -> AppMetadata:
         default=60,
         description="Time stride in seconds for summarization"
     )
+    metadata.add_parameter(
+        name="segment_duration",
+        type="integer",
+        default=60,
+        description="Duration of each segment in seconds"
+    )
+    metadata.add_parameter(
+        name="config",
+        type="string",
+        default="config/default.yaml",
+        description="Path to the configuration file"
+    )
 
     return metadata
 
