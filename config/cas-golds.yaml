@@ -1,0 +1,18 @@
+default_prompt:
+  system : "You are a helpful assistant."
+  user : |
+    You will be shown frame level captions and a transcript for one segment of a news video. You should generate a short summary of the segment. If the segment is a commerical, say Promo followed by the product name. The content is for only one segment. If there is no content, say None.
+    {frame_captions}
+    {transcript}
+
+context_config:
+  input_context: "timeframe"
+
+  timeframe:
+    app_uri: "cas-gold-to-mmif-script"
+
+  apps: #limitation of the current implementation, assumed that each upstream app has only generated
+    # one view.
+    # "llama-captioner": "frame_captions"
+    "transnet" : "frame_captions" #HACK
+    "whisper-wrapper": "transcript"

@@ -1,0 +1,25 @@
+default_prompt:
+  system : "You are a helpful assistant for summarizing news stories."
+  user : |
+    You will be shown a transcript for a single news segment. You should generate a short summary of the segment. If the segment is a commerical, say Promo followed by the product name.
+    {transcript}
+    {frame_captions}
+
+    examples:
+    Gary Shepard on the rescue of two whales from the ice in Barrow, Alaska; interview with Ron Morris of NOAA Fisheries.\n
+    FAA proposes "major surgery" for Boeing 737 jetliners (with a proposal to replace 7,200 rivets in key joints of 291 737's), as reported by Bettina Gregory\n
+    31 members of House Armed Services Committee urge Reagan to improve safety procedures at nuclear weapons manufacturing facilities
+
+
+context_config:
+  input_context: "timeframe"
+
+  timeframe:
+    app_uri: "cas-gold-to-mmif-script"
+
+  apps: #limitation of the current implementation, assumed that each upstream app has only generated
+    # one view.
+    # "llama-captioner": "frame_captions"
+    "transnet" : "frame_captions" #HACK
+    "whisper-wrapper": "transcript"
+    # "http://apps.clams.ai/app-llava-captioner/v1": "swt-transcription"

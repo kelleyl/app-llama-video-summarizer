@@ -1,0 +1,19 @@
+default_prompt:
+  system: "You are a helpful assistant."
+  user: |
+    The following text contains information extracted from a video. Please provide a concise summary.
+    {frame_captions}
+    {transcript}
+
+context_config:
+  input_context: "fixed_window"  # Options: "timeframe", "fixed_window", "timepoint"
+
+  apps:
+    "http://apps.clams.ai/app-llava-captioner/v1": "frame_captions"
+    "http://apps.clams.ai/app-whisper-wrapper/v1": "transcript"
+
+  fixed_window:
+    window_duration: 30  # in seconds
+    stride: 30  # in seconds
+    
+    # should generate timeframes with summaries of 30 second chunks

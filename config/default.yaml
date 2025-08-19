@@ -1,0 +1,43 @@
+default_prompt:
+  system: "You are a helpful assistant."
+  user: |
+    The following text contains information extracted from a video. Please provide a concise summary.
+    
+    {frame_captions}
+    {transcript}
+
+custom_prompts:
+  "slate":
+    system: "You are a helpful assistant specialized in formating slates."
+    user: |
+      {frame_captions}
+      Format the slate as json key value pairs.
+  "chyron":
+    system: "You are a helpful assistant."
+    user: |
+      {frame_captions}
+      {transcript}
+      Given the frame captions and transcript, who is shown in this segment?
+
+# Optional postprocessing to apply to Llama output before creating text documents
+# Available options: null, "json_extractor"
+postprocessor: null
+
+context_config:
+  input_context: "timeframe"  # Options: "timeframe", "timepoint", "fixed_window"
+
+  apps:
+    "http://apps.clams.ai/app-llava-captioner/v1": "frame_captions"
+    "http://apps.clams.ai/app-whisper-wrapper/v1": "transcript"
+
+  timeframe:
+    app_uri: "http://apps.clams.ai/app-swt-detection/"
+    label_mapping:
+      "slate": "slate"
+      "chyron": "chyron" # TODO: should this have an option for "ignore"
+
+    # generate alignments with text documents to the input timeframes
+
+
+
+    

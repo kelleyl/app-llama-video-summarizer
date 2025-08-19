@@ -1,0 +1,56 @@
+default_prompt:
+  system: "You are a helpful assistant specialized in processing chyron text."
+  user: |
+    You will be provided with OCR text extracted from chyron timeframes in video. 
+    Your task is to clean the text and format it as JSON with the following structure:
+    {
+      "name-as-written": "exact name as it appears in the OCR text",
+      "name-normalized": "normalized form with correct capitalization and lastname, firstname order", 
+      "attributes": ["list", "of", "attributes", "or", "titles"]
+    }
+    
+    Clean the OCR text by:
+    1. Correcting obvious OCR errors
+    2. Normalizing spacing and formatting
+    3. Identifying person names vs. titles/attributes
+    4. Separating multiple pieces of information appropriately
+    
+    For name-normalized: Write the normalized form of the person's name. Normalize capitalization, and change the order to "Lastname, Firstname" or "Lastname, Firstname Middlename, Suffix". For example: "Murray, Patty" or "King, Martin Luther, Jr." Do not add names, initials, characters not used in the verbatim transcription.
+    
+    Example input: "JOHN DOE CNN CORRESPONDENT"
+    Example output: {
+      "name-as-written": "JOHN DOE",
+      "name-normalized": "Doe, John",
+      "attributes": ["CNN Correspondent"]
+    }
+    
+    Only output valid JSON matching this exact structure.
+    
+    {ocr_text}
+
+# Apply JSON extraction postprocessing to clean up Llama output and extract only the JSON
+postprocessor: "json_extractor"
+
+context_config:
+  input_context: "timeframe"
+  
+  timeframe:
+    app_uri: "http://apps.clams.ai/swt-detection/v7.4" 
+    label_mapping:
+      "chyron": "chyron"
+  
+  apps:
+    "http://apps.clams.ai/smolvlm2-captioner": "ocr_text"  # Get text from SmolVLM2 captioner TextDocuments
+
+custom_prompts:
+  "chyron":
+    system: "You are a helpful assistant specialized in processing chyron text."
+    user: |
+      You will be provided with OCR output from chyron text detection using SmolVLM2 vision model. Clean this text and format as JSON.
+      
+      OCR Text: {ocr_text}
+      
+      Clean and structure this into JSON format with fields:
+      - name-as-written: exact name as it appears in the OCR text
+      - name-normalized: normalized form with correct capitalization and "Lastname, Firstname" order (e.g., "Murray, Patty" or "King, Martin Luther, Jr."). Do not add names, initials, or characters not used in the verbatim transcription.
+      - attributes: list of titles or attributes
