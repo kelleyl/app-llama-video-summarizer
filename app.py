@@ -91,7 +91,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", action="store", default="5000", help="set port to listen")
     parser.add_argument("--production", action="store_true", help="run gunicorn server")
-    parser.add_argument("--stride", type=int, default=60, help="Time stride in seconds for summarization")
 
     parsed_args = parser.parse_args()
 
