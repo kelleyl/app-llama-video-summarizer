@@ -57,8 +57,10 @@ class JSONExtractorPostProcessor(PostProcessor):
                 try:
                     # Validate it's actually valid JSON
                     json.loads(match)
-                    self.logger.debug(f"JSONExtractor extracted: {match}")
-                    return match.strip()
+                    # Remove newlines from the JSON string
+                    cleaned_match = re.sub(r'\s*\n\s*', ' ', match.strip())
+                    self.logger.debug(f"JSONExtractor extracted: {cleaned_match}")
+                    return cleaned_match
                 except json.JSONDecodeError:
                     continue
         
@@ -78,8 +80,10 @@ class JSONExtractorPostProcessor(PostProcessor):
                                 candidate = text[start_idx:i+1]
                                 try:
                                     json.loads(candidate)
-                                    self.logger.debug(f"JSONExtractor extracted (balanced): {candidate}")
-                                    return candidate.strip()
+                                    # Remove newlines from the JSON string
+                                    cleaned_candidate = re.sub(r'\s*\n\s*', ' ', candidate.strip())
+                                    self.logger.debug(f"JSONExtractor extracted (balanced): {cleaned_candidate}")
+                                    return cleaned_candidate
                                 except json.JSONDecodeError:
                                     break
         except Exception as e:
