@@ -1,4 +1,7 @@
 # Make sure clams-python version is explicitly specified, at least the lower bound
-clams-python==1.2.5
+clams-python==1.3.1
 torch
 transformers
+accelerate
+bitsandbytes>=0.41.1  # Required for 8-bit quantization
+opencv-python  # Required for video processing
